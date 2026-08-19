@@ -10,6 +10,7 @@ import {
 import type { WalletSummary } from "@/lib/queries";
 import { formatBRL } from "@/lib/utils";
 import { MetricStat } from "@/components/wallet/metric-stat";
+import { HeroBalance } from "@/components/wallet/hero-balance";
 
 export function BalanceCard({ summary }: { summary: WalletSummary }) {
   const isNegative = summary.projected < 0;
@@ -39,13 +40,10 @@ export function BalanceCard({ summary }: { summary: WalletSummary }) {
       </svg>
 
       <div className="relative">
-        <div className="flex items-center gap-2 text-sm font-medium text-emerald-100/80">
-          <Wallet className="size-4" />
-          Saldo disponível
-        </div>
-        <p className="mt-1 font-numeric text-4xl font-bold tracking-tight">
-          {formatBRL(summary.available)}
-        </p>
+        <HeroBalance
+          value={formatBRL(summary.available)}
+          formula="Saldo inicial + Recebido − Pago."
+        />
 
         <div className="mt-5 grid grid-cols-2 gap-3">
           <MetricStat
