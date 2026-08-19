@@ -1,26 +1,170 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+/* Dark mode ativado por classe .dark no <html> */
+@custom-variant dark (&:is(.dark *));
+
+/* ------------------------------------------------------------------ */
+/*  Tokens semânticos — Paleta financeira autêntica                    */
+/* ------------------------------------------------------------------ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.9rem;
+
+  /* Fundo off-white levemente esmeralda frio */
+  --background: #f4f7f6;
+  --foreground: #0f172a;
+
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  /* Principal / Liquidez / Patrimônio — Verde Esmeralda Profundo */
+  --primary: #059669;
+  --primary-foreground: #f0fdf4;
+
+  --secondary: #eef2f1;
+  --secondary-foreground: #0f172a;
+
+  --muted: #eef2f1;
+  --muted-foreground: #64748b;
+
+  /* Acento — petróleo muted */
+  --accent: #e6ede9;
+  --accent-foreground: #0f172a;
+
+  /* Saídas / Devendo / Estouro — Carmim */
+  --destructive: #be123c;
+  --destructive-foreground: #fff1f2;
+
+  --border: #e2e8e5;
+  --input: #dfe6e2;
+  --ring: #059669;
+
+  /* Tokens financeiros dedicados */
+  --success: #059669; /* entradas confirmadas / economia */
+  --success-foreground: #f0fdf4;
+  --danger: #be123c; /* devendo / estouro */
+  --danger-foreground: #fff1f2;
+  --future: #334155; /* previsões / recebimentos futuros — petróleo */
+  --future-foreground: #f8fafc;
+  --gold: #b08d34; /* dourado champagne — badges finas */
+  --gold-foreground: #fffbeb;
+  --mint: #6ee7b7; /* muted mint — acentos suaves */
 }
 
+.dark {
+  /* Dark slate profundo */
+  --background: #0a0f1a;
+  --foreground: #e2e8f0;
+
+  --card: #121a28;
+  --card-foreground: #e2e8f0;
+
+  --popover: #121a28;
+  --popover-foreground: #e2e8f0;
+
+  --primary: #10b981;
+  --primary-foreground: #052e1a;
+
+  --secondary: #1b2536;
+  --secondary-foreground: #e2e8f0;
+
+  --muted: #1b2536;
+  --muted-foreground: #94a3b8;
+
+  --accent: #1e293b;
+  --accent-foreground: #e2e8f0;
+
+  --destructive: #e11d48;
+  --destructive-foreground: #fff1f2;
+
+  --border: #223049;
+  --input: #223049;
+  --ring: #10b981;
+
+  --success: #10b981;
+  --success-foreground: #052e1a;
+  --danger: #fb7185;
+  --danger-foreground: #4c0519;
+  --future: #64748b;
+  --future-foreground: #f8fafc;
+  --gold: #d4b45f;
+  --gold-foreground: #292018;
+  --mint: #34d399;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Mapeamento para utilitários Tailwind v4                            */
+/* ------------------------------------------------------------------ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-future: var(--future);
+  --color-future-foreground: var(--future-foreground);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-mint: var(--mint);
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-numeric), ui-monospace, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
+* {
+  border-color: var(--border);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Números financeiros com fonte monoespaçada tabular */
+.font-numeric {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Esconde scrollbar mantendo o scroll (listas mobile) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

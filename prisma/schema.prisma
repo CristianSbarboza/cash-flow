@@ -1,0 +1,126 @@
+// Fluxo — Gestão Financeira Pessoal
+// Prisma + PostgreSQL (Supabase)
+// Valores monetários são armazenados em centavos (Int) para evitar
+// imprecisão de ponto flutuante.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // Conexão direta (migrations) — Supabase usa PgBouncer no pool.
+  directUrl = env("DIRECT_URL")
+}
+
+// ------------------------------------------------------------------
+//  Enums
+// ------------------------------------------------------------------
+
+/// Status de uma transação. Define também a direção do dinheiro:
+///  - PAGO / DEVENDO           => saída (despesa)
+///  - RECEBIDO / RECEBIMENTO_FUTURO => entrada (receita)
+/// Apenas PAGO e RECEBIDO afetam o Saldo Disponível (liquidez atual).
+enum TransactionStatus {
+  PAGO
+  RECEBIDO
+  DEVENDO
+  RECEBIMENTO_FUTURO
+}
+
+// ------------------------------------------------------------------
+//  Models
+// ------------------------------------------------------------------
+
+model User {
+  id           String  @id @default(cuid())
+  /// Login é feito por nome (único) + senha.
+  name         String  @unique
+  passwordHash String
+  /// Saldo inicial informado ao criar a conta (em centavos).
+  openingBalanceCents Int @default(0)
+
+  transactions Transaction[]
+  allocations  Allocation[]
+  monthlyPlans MonthlyPlan[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Transaction {
+  id          String            @id @default(cuid())
+  userId      String
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  description String
+  /// Valor sempre positivo, em centavos. A direção vem do status.
+  amountCents Int
+  status      TransactionStatus
+  /// Categoria livre (ex.: "Mercado", "Salário").
+  category    String?
+
+  /// Data de vencimento/previsão para DEVENDO e RECEBIMENTO_FUTURO.
+  dueDate     DateTime?
+
+  /// Envelope/objetivo ao qual a despesa foi atribuída (opcional).
+  allocationId String?
+  allocation   Allocation? @relation(fields: [allocationId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, status])
+  @@index([userId, createdAt])
+  @@map("transactions")
+}
+
+/// Envelope de dinheiro / meta por objetivo ("Para que serve este dinheiro").
+model Allocation {
+  id           String  @id @default(cuid())
+  userId       String
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name         String
+  /// Quanto do saldo já está "carimbado" para este fim (centavos).
+  currentCents Int     @default(0)
+  /// Meta opcional (ex.: Reserva de Emergência = R$ 1.000).
+  targetCents  Int?
+  /// Cor/emoji para identidade visual do cartão.
+  color        String  @default("emerald")
+  icon         String?
+
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("allocations")
+}
+
+/// Planejamento mensal — as quatro perguntas-chave de previsão.
+model MonthlyPlan {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// Mês de referência no formato "YYYY-MM".
+  month  String
+
+  /// Quanto pretendo gastar? (orçamento teto)
+  plannedSpendCents  Int @default(0)
+  /// Quanto preciso gastar? (despesas fixas/obrigatórias)
+  requiredSpendCents Int @default(0)
+  /// Ganhos previstos para o mês.
+  expectedIncomeCents Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, month])
+  @@map("monthly_plans")
+}
