@@ -44,17 +44,30 @@ export async function createTransaction(
 
   const { description, amount, status, category, dueDate, allocationId } =
     parsed.data;
+  const amountCents = Math.round(amount * 100);
 
-  await prisma.transaction.create({
-    data: {
-      userId,
-      description,
-      amountCents: Math.round(amount * 100),
-      status,
-      category: category || null,
-      dueDate: dueDate ? new Date(dueDate) : null,
-      allocationId: allocationId || null,
-    },
+  await prisma.$transaction(async (db) => {
+    await db.transaction.create({
+      data: {
+        userId,
+        description,
+        amountCents,
+        status,
+        category: category || null,
+        dueDate: dueDate ? new Date(dueDate) : null,
+        allocationId: allocationId || null,
+      },
+    });
+
+    // Um gasto já pago consome de fato a reserva do objetivo.
+    // Enquanto está DEVENDO, o vínculo é só um sinal de intenção —
+    // o dinheiro ainda não saiu, então o carimbado não muda.
+    if (status === "PAGO" && allocationId) {
+      await db.allocation.updateMany({
+        where: { id: allocationId, userId },
+        data: { currentCents: { decrement: amountCents } },
+      });
+    }
   });
 
   revalidateApp();
@@ -79,9 +92,19 @@ export async function settleTransaction(id: string): Promise<ActionResult> {
     return { ok: false, error: "Este lançamento já foi liquidado." };
   }
 
-  await prisma.transaction.update({
-    where: { id },
-    data: { status: nextStatus },
+  await prisma.$transaction(async (db) => {
+    await db.transaction.update({
+      where: { id },
+      data: { status: nextStatus },
+    });
+
+    // Só ao efetivamente pagar (DEVENDO → PAGO) o valor sai do carimbado.
+    if (nextStatus === "PAGO" && tx.allocationId) {
+      await db.allocation.updateMany({
+        where: { id: tx.allocationId, userId },
+        data: { currentCents: { decrement: tx.amountCents } },
+      });
+    }
   });
 
   revalidateApp();
@@ -90,7 +113,22 @@ export async function settleTransaction(id: string): Promise<ActionResult> {
 
 export async function deleteTransaction(id: string): Promise<ActionResult> {
   const userId = await requireUserId();
-  await prisma.transaction.deleteMany({ where: { id, userId } });
+
+  const tx = await prisma.transaction.findFirst({ where: { id, userId } });
+  if (!tx) return { ok: false, error: "Lançamento não encontrado." };
+
+  await prisma.$transaction(async (db) => {
+    await db.transaction.delete({ where: { id } });
+
+    // Excluir um gasto já pago devolve o valor pro carimbado do objetivo.
+    if (tx.status === "PAGO" && tx.allocationId) {
+      await db.allocation.updateMany({
+        where: { id: tx.allocationId, userId },
+        data: { currentCents: { increment: tx.amountCents } },
+      });
+    }
+  });
+
   revalidateApp();
   return { ok: true };
 }

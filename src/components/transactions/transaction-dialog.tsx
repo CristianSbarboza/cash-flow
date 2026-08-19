@@ -190,6 +190,13 @@ export function TransactionDialog({
                   ))}
                 </SelectContent>
               </Select>
+              {allocationId && (
+                <p className="text-xs text-muted-foreground">
+                  {status === "PAGO"
+                    ? "O valor sai do carimbado deste objetivo agora."
+                    : "Só desconta do carimbado quando você marcar como pago."}
+                </p>
+              )}
             </div>
           )}
 
