@@ -8,7 +8,6 @@ import {
   getWalletSummary,
 } from "@/lib/queries";
 import { BalanceCard } from "@/components/wallet/balance-card";
-import { ProjectedBalanceCard } from "@/components/wallet/projected-balance-card";
 import { TransactionDialog } from "@/components/transactions/transaction-dialog";
 import { TransactionItem } from "@/components/transactions/transaction-item";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -29,7 +28,6 @@ export default async function HomePage() {
   return (
     <div className="space-y-6">
       <BalanceCard summary={summary} />
-      <ProjectedBalanceCard summary={summary} />
 
       {/* Ações rápidas */}
       <div className="grid grid-cols-2 gap-3">
