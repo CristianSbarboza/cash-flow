@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Fluxo — Gestão Financeira Pessoal",
-    short_name: "Fluxo",
+    name: "Cash Flow — Gestão Financeira Pessoal",
+    short_name: "Cash Flow",
     description:
       "Controle sua liquidez, planeje o mês e carimbe seu dinheiro por objetivo.",
     start_url: "/",

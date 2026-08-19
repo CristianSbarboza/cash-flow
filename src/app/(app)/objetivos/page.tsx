@@ -8,7 +8,7 @@ import { AllocationDialog } from "@/components/allocations/allocation-dialog";
 import { AllocationCard } from "@/components/allocations/allocation-card";
 import { EmptyState } from "@/components/ui/empty-state";
 
-export const metadata: Metadata = { title: "Objetivos — Fluxo" };
+export const metadata: Metadata = { title: "Objetivos — Cash Flow" };
 
 export default async function ObjetivosPage() {
   const userId = await requireUserId();

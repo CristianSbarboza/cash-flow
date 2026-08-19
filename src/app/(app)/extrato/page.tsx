@@ -4,7 +4,7 @@ import { requireUserId } from "@/lib/session";
 import { getTransactions } from "@/lib/queries";
 import { TransactionList } from "@/components/transactions/transaction-list";
 
-export const metadata: Metadata = { title: "Extrato — Fluxo" };
+export const metadata: Metadata = { title: "Extrato — Cash Flow" };
 
 export default async function ExtratoPage() {
   const userId = await requireUserId();

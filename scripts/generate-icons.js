@@ -1,6 +1,6 @@
 /**
  * Gera os ícones do PWA (manifest + apple-touch-icon) a partir da marca
- * "Fluxo" (quadrado esmeralda + onda de fluxo), sem depender de libs de
+ * "Cash Flow" (quadrado esmeralda + onda de fluxo), sem depender de libs de
  * imagem — desenha em memória e codifica PNG usando apenas `zlib`.
  *
  * Uso: node scripts/generate-icons.js

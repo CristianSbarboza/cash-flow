@@ -9,7 +9,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 
-export const metadata: Metadata = { title: "Criar conta — Fluxo" };
+export const metadata: Metadata = { title: "Criar conta — Cash Flow" };
 
 export default function RegisterPage() {
   return (

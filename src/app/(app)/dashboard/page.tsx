@@ -19,7 +19,7 @@ import { PlanDialog } from "@/components/dashboard/plan-dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = { title: "Painel — Fluxo" };
+export const metadata: Metadata = { title: "Painel — Cash Flow" };
 
 export default async function DashboardPage() {
   const userId = await requireUserId();

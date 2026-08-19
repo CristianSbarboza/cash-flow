@@ -1,4 +1,4 @@
-# Fluxo — Gestão Financeira Pessoal
+# Cash Flow — Gestão Financeira Pessoal
 
 Web App **mobile-first** de gestão financeira individual. Controle sua liquidez,
 planeje o mês e "carimbe" seu dinheiro por objetivo.

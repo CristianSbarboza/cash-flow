@@ -16,10 +16,10 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fluxo — Gestão Financeira Pessoal",
+  title: "Cash Flow — Gestão Financeira Pessoal",
   description:
     "Controle sua liquidez, planeje o mês e carimbe seu dinheiro por objetivo.",
-  applicationName: "Fluxo",
+  applicationName: "Cash Flow",
   icons: {
     icon: [
       { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Fluxo",
+    title: "Cash Flow",
   },
 };
 

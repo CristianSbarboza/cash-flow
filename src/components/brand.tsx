@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/** Marca do app: "Fluxo" com um glifo de fluxo/onda em esmeralda. */
+/** Marca do app: "Cash Flow" com um glifo de fluxo/onda em esmeralda. */
 export function Brand({
   className,
   showName = true,
@@ -33,7 +33,9 @@ export function Brand({
         </svg>
       </span>
       {showName && (
-        <span className="text-xl font-extrabold tracking-tight">Fluxo</span>
+        <span className="text-xl font-extrabold tracking-tight">
+          Cash Flow
+        </span>
       )}
     </div>
   );
