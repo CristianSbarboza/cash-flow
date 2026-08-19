@@ -17,6 +17,8 @@ export type WalletSummary = {
   pendingIn: number;
   /** Projeção: disponível − carimbado − a pagar + a receber. */
   projected: number;
+  /** Total bruto já recebido (RECEBIDO) desde o início, sem descontar gastos. */
+  totalReceived: number;
 };
 
 const toReais = (cents: number) => cents / 100;
@@ -58,6 +60,7 @@ export async function getWalletSummary(userId: string): Promise<WalletSummary> {
     pendingOut: toReais(pendingOut),
     pendingIn: toReais(pendingIn),
     projected: toReais(availableCents - allocatedCents - pendingOut + pendingIn),
+    totalReceived: toReais(received),
   };
 }
 

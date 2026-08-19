@@ -1,6 +1,7 @@
 import {
   ArrowDownLeft,
   ArrowUpRight,
+  Coins,
   Lock,
   TrendingDown,
   TrendingUp,
@@ -71,7 +72,6 @@ export function BalanceCard({ summary }: { summary: WalletSummary }) {
             formula="Soma das transações com status 'Devendo'."
           />
           <MetricStat
-            wide
             danger={isNegative}
             icon={
               isNegative ? (
@@ -83,6 +83,12 @@ export function BalanceCard({ summary }: { summary: WalletSummary }) {
             label="Saldo projetado"
             value={`${isNegative ? "−" : ""}${formatBRL(Math.abs(summary.projected))}`}
             formula="Saldo disponível − Carimbado − A pagar + A receber."
+          />
+          <MetricStat
+            icon={<Coins className="size-3.5" />}
+            label="Total recebido"
+            value={formatBRL(summary.totalReceived)}
+            formula="Soma de tudo que você já recebeu (transações com status 'Recebido') desde o início, sem descontar gastos."
           />
         </div>
       </div>
