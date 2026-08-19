@@ -33,7 +33,7 @@ export function ProjectedBalanceCard({ summary }: { summary: WalletSummary }) {
         <div>
           <p className="text-sm font-medium">Saldo projetado</p>
           <p className="text-xs text-muted-foreground">
-            Disponível − a pagar + a receber
+            Disponível − carimbado − a pagar + a receber
           </p>
         </div>
       </div>

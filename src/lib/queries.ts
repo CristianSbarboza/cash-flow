@@ -15,7 +15,7 @@ export type WalletSummary = {
   pendingOut: number;
   /** Total a receber (RECEBIMENTO_FUTURO). */
   pendingIn: number;
-  /** Projeção de saldo caso tudo pendente se realize. */
+  /** Projeção: disponível − carimbado − a pagar + a receber. */
   projected: number;
 };
 
@@ -57,7 +57,7 @@ export async function getWalletSummary(userId: string): Promise<WalletSummary> {
     unallocated: toReais(availableCents - allocatedCents),
     pendingOut: toReais(pendingOut),
     pendingIn: toReais(pendingIn),
-    projected: toReais(availableCents - pendingOut + pendingIn),
+    projected: toReais(availableCents - allocatedCents - pendingOut + pendingIn),
   };
 }
 
