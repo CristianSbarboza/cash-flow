@@ -8,8 +8,8 @@ const { auth } = NextAuth(authConfig);
 export default auth;
 
 export const config = {
-  // Protege todas as rotas exceto assets estáticos e a API de auth.
+  // Protege todas as rotas exceto assets estáticos, o manifest do PWA e a API de auth.
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
