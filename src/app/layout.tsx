@@ -32,6 +32,11 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "Cash Flow",
   },
+  other: {
+    // Next só emite a tag moderna (mobile-web-app-capable); Safari em iOS
+    // anterior ao 16.4 só entende a antiga, então mantemos as duas.
+    "apple-mobile-web-app-capable": "yes",
+  },
 };
 
 export const viewport: Viewport = {
